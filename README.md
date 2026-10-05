@@ -242,5 +242,5 @@ project-2-fraud-detection/
 
 ## Repository
 
-- **Best model run ID:** ``
+- **Best model run ID:** ``mlflow ui` to view all training runs and compare metrics.`
 - **MLflow experiment:** `"MLflow Fraud Detection Experiment"`
