@@ -3,4 +3,6 @@ data/*.csv
 .env
 model.pkl
 mlruns/
+mlflow.db
+*.db
 
