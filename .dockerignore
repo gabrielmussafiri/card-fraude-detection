@@ -1,0 +1,12 @@
+venv/
+data/
+.env
+__pycache__/
+*.pyc
+mlruns/
+explore.py
+model.py
+README.md
+.git/
+Dockerfile
+.dockerignore
