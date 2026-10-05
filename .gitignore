@@ -1,4 +1,6 @@
 venv/
 data/*.csv
 .env
+model.pkl
+mlruns/
 

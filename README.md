@@ -1,8 +1,8 @@
 # Credit Card Fraud Detection
 
-A machine learning model that flags fraudulent credit card transactions
-in real time, trained on a dataset of 284,807 real transactions with a
-0.17% fraud rate.
+A machine learning model that flags fraudulent credit card transactions in
+real time. Trained on 284,807 real transactions with a 0.17% fraud rate,
+served via a FastAPI endpoint, and deployed as a Docker container.
 
 ---
 
@@ -37,20 +37,19 @@ in this dataset), so a naive model that predicts "never fraud" achieves
 99.83% accuracy while catching zero frauds.
 
 The goal is a model that catches as much fraud as possible (high recall)
-without generating too many false alarms that would annoy legitimate
-customers (high precision).
+without generating too many false alarms (high precision).
 
 ---
 
 ## The Dataset
 
-- **Source:** [Kaggle - Credit Card Fraud Detection](https://www.kaggle.com/datasets/mlg-ulb/creditcardfraud)
+- **Source:** [Kaggle — Credit Card Fraud Detection](https://www.kaggle.com/datasets/mlg-ulb/creditcardfraud)
 - **Size:** 284,807 transactions, 30 features
 - **Class imbalance:** 492 frauds (0.17%) vs. 284,315 normals (99.83%)
-- **Features:** `Time`, `Amount`, and 28 anonymized PCA-transformed features (V1-V28)
+- **Features:** `Time`, `Amount`, and 28 anonymized PCA-transformed features (V1–V28)
 - **Missing values:** None
 
-The V-features are the result of PCA transformation applied by the dataset
+The V-features are the result of a PCA transformation applied by the dataset
 authors to protect user privacy. They retain the signal but not the
 original meaning.
 
@@ -67,6 +66,8 @@ original meaning.
 5. **Evaluate** with precision, recall, F1, AUPRC, confusion matrix, and
    classification report.
 6. **Track** all experiments in MLflow for reproducibility and comparison.
+7. **Serve** the trained model via a FastAPI endpoint.
+8. **Package** the API as a Docker container for reproducible deployment.
 
 ---
 
@@ -78,6 +79,10 @@ original meaning.
   the model's performance across all thresholds, not just the default 0.5.
 - **`scale_pos_weight` is essential.** Without it, XGBoost ignores the
   minority class because it's optimizing overall error rate.
+- **Scaling isn't always necessary.** XGBoost is invariant to monotonic
+  transformations of features. I tested with and without `StandardScaler`
+  on `Amount` and `Time` — AUPRC was identical (0.8791), so I removed it
+  for simplicity.
 - **The signal is weak.** The strongest single feature correlation is only
   -0.33. Fraud detection requires combining many weak signals, not finding
   one strong one.
@@ -86,17 +91,9 @@ original meaning.
 
 ## How to Run
 
-**Prerequisites:**
-
-- Python 3.10+
-- Kaggle account (for dataset download)
-
-**Setup:**
+### Option 1: Docker (recommended)
 
 ```bash
-git clone https://github.com/gabrielmussafiri/card-fraude-detection
-cd project-2-fraud-detection
-python3 -m venv venv
-source venv/bin/activate
-pip install -r requirements.txt
+docker build -t fraud-detection-api .
+docker run -p 8000:8000 fraud-detection-api
 ```

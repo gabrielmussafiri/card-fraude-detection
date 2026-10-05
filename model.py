@@ -3,6 +3,7 @@ from sklearn.model_selection import train_test_split
 from xgboost import XGBClassifier
 from sklearn.metrics import classification_report, confusion_matrix, f1_score , precision_score, recall_score , average_precision_score
 import mlflow
+import joblib
 
 
 # Import Data
@@ -39,6 +40,7 @@ with mlflow.start_run():
         )
     
     model.fit(X_train, y_train)
+    joblib.dump(model,'model.pkl')
     
     # Predict on the test set
     y_pred = model.predict(X_test)
