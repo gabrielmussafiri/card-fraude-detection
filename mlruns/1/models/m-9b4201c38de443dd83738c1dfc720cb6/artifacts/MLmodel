@@ -1,0 +1,22 @@
+artifact_path: /Users/gm/LYGM GROUP/Side Projects/My AI Engineer Portofolio/project-2-fraud-detection/mlruns/1/models/m-9b4201c38de443dd83738c1dfc720cb6/artifacts
+flavors:
+  python_function:
+    data: model.ubj
+    env:
+      conda: conda.yaml
+      virtualenv: python_env.yaml
+    loader_module: mlflow.xgboost
+    python_version: 3.13.2
+  xgboost:
+    code: null
+    data: model.ubj
+    model_class: xgboost.sklearn.XGBClassifier
+    model_format: ubj
+    xgb_version: 3.4.1
+mlflow_version: 3.16.1
+model_id: m-9b4201c38de443dd83738c1dfc720cb6
+model_size_bytes: 244195
+model_uuid: m-9b4201c38de443dd83738c1dfc720cb6
+prompts: null
+run_id: fc4a80e3b9b543438ac41d3d2a6dc5a7
+utc_time_created: '2026-10-04 13:09:03.726660'
