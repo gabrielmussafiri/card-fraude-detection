@@ -97,3 +97,150 @@ original meaning.
 docker build -t fraud-detection-api .
 docker run -p 8000:8000 fraud-detection-api
 ```
+
+Then open `http://localhost:8000/docs` for the interactive API.
+
+### Option 2: Local Python
+
+**Prerequisites:**
+
+- Python 3.13+
+- Kaggle account (for dataset download)
+
+**Setup:**
+
+```bash
+git clone https://github.com/gabrielmussafiri/card-fraude-detection.git
+cd project-2-fraud-detection
+python3 -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+```
+
+**Download the dataset:**
+
+```bash
+kaggle datasets download -d mlg-ulb/creditcardfraud
+unzip creditcardfraud.zip -d data/
+rm creditcardfraud.zip
+```
+
+**Run the EDA:**
+
+```bash
+python explore.py
+```
+
+**Train the model:**
+
+```bash
+python model.py
+```
+
+**View experiments:**
+
+```bash
+mlflow ui
+```
+
+Then open `http://localhost:5000`.
+
+**Run the API locally:**
+
+```bash
+uvicorn app:app --reload
+```
+
+Then open `http://localhost:8000/docs`.
+
+---
+
+## API Reference
+
+### `GET /health`
+
+Returns `{"status": "ok"}` if the service is running.
+
+### `POST /predict`
+
+Accepts a transaction with 30 features and returns a prediction.
+
+**Request body:**
+
+```json
+{
+  "Time": 406,
+  "V1": -1.3598071336738,
+  "V2": -0.0727811733098497,
+  "...": "...",
+  "V28": -0.0210530534538215,
+  "Amount": 149.62
+}
+```
+
+**Response:**
+
+```json
+{
+  "is_fraud": true,
+  "probability": 0.9996
+}
+```
+
+**Example:**
+
+```bash
+curl -X POST http://localhost:8000/predict \
+  -H "Content-Type: application/json" \
+  -d '{"Time": 406, "V1": -1.36, "V2": -0.07, "Amount": 149.62}'
+```
+
+---
+
+## Tech Stack
+
+- **Python 3.13**
+- **pandas, numpy** — Data manipulation
+- **scikit-learn** — Preprocessing, metrics, train/test split
+- **XGBoost** — Gradient boosting classifier
+- **MLflow** — Experiment tracking and model registry
+- **FastAPI** — REST API for model serving
+- **Uvicorn** — ASGI server
+- **Docker** — Containerized deployment
+
+---
+
+## Project Structure
+
+```
+project-2-fraud-detection/
+├── app/
+│   └── app.py                 # FastAPI service
+├── data/
+│   └── creditcard.csv         # Dataset (gitignored)
+├── explore.py                 # Exploratory data analysis
+├── model.py                   # Model training and evaluation
+├── model.pkl                  # Trained model artifact (gitignored)
+├── Dockerfile                 # Container definition
+├── .dockerignore              # Files excluded from Docker build
+├── requirements.txt           # Python dependencies
+├── .gitignore                 # Excludes venv, data, .env, mlruns
+└── README.md                  # This file
+```
+
+---
+
+## Future Work
+
+- Hyperparameter tuning (grid search or Optuna)
+- Threshold tuning based on business cost trade-offs
+- Try LightGBM and compare AUPRC
+- Add model monitoring for data drift
+- Set up CI/CD to auto-build and push the Docker image
+
+---
+
+## Repository
+
+- **Best model run ID:** ``
+- **MLflow experiment:** `"MLflow Fraud Detection Experiment"`
